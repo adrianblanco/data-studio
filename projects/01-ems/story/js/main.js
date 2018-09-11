@@ -153,7 +153,7 @@ var customLayer = L.geoJSON(null, {
 
 
 // EPSG:4326 problem with NY state projection, map shaper, leaflet did not recognize it
-var dt = omnivore.topojson('data-studio/projects/01-ems/story/data/zipcodes_2.json', null, customLayer).addTo(map);
+var dt = omnivore.topojson('https://github.com/adrianblanco/data-studio/blob/master/projects/01-ems/story/data/zipcodes_2.json', null, customLayer).addTo(map);
 console.log(dt)
 //var dt = omnivore.topojson('../data/zipcodes_2.json').addTo(map);
 
