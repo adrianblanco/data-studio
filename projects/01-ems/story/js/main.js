@@ -105,14 +105,31 @@ function handleStepExit(e){
 
 ////////// color palette
 
-function styleBuilder (d) {
+var color2 = "blue" // por defecto puedo poner
+
+
+function styleBuilder (d) {   // d, color
   console.log(d)
-  return d < 8.5 ? 'red' :
-         d > 10.5 ? 'black' :
-         d > 10.5 ? 'black' :
-         d > 10.5 ? 'black' :
-         d > 9.5 ? 'yellow' : 'blue';
+
+  if (color2 == "dark") {
+
+    return d < 8.5 ? 'blue' :
+         d > 10.5 ? 'blue' :
+         d > 10.5 ? 'blue' :
+         d > 10.5 ? 'blue' :
+         d > 9.5 ? 'blue' : 'blue';
+  }
+
+  if (color2 == "blue") {
+
+    return d < 4.5 ? 'yellow' :
+         d > 10.5 ? 'yellow' :
+         d > 10.5 ? 'yellow' :
+         d > 10.5 ? 'yellow' :
+         d > 9.5 ? 'yellow' : 'red';
+  }
 }
+
 
 function getStyle (feature) {
   return {
@@ -134,14 +151,11 @@ function neighborhoodPopup (layer) {
 // later using omnivore (see below)
 
 
-// different getStyles
-// load a different one when you click
-//
-
 var customLayer = L.geoJSON(null, {
 // http://leafletjs.com/reference.html#geojson-style
   'style': getStyle
 }).bindTooltip(neighborhoodPopup)
+
 
 // This is where we create a layer using topojson!
 // If we didn't want to customize the color or have a
@@ -153,8 +167,59 @@ var customLayer = L.geoJSON(null, {
 
 
 // EPSG:4326 problem with NY state projection, map shaper, leaflet did not recognize it
-var dt = omnivore.topojson('http://laitus.com/data/zipcodes_2.json', null, customLayer).addTo(map);
-console.log(dt)
+// 
+// BORRAR var dt = null, dt2 = null, dt3 = null
+
+dt = omnivore.topojson('data/respir.json', null, customLayer).addTo(map);
+console.log(customLayer)
+
+// different getStyles
+// load a different one when you click
+//
+
+// Create updateLayer
+
+
+$('#card').click(function(){
+
+// Borrar los anteriores
+  if (map.hasLayer(dt)) {
+    map.removeLayer(dt) //L: Quitar palabra reservada "return"
+  } // dt por customLayer
+
+  color2 = "dark"
+
+  //L: customLayer ya declarado de manera global (en linea 158). Por eso, quitamos de aquí la palabra reservada "var"
+  customLayer = L.geoJSON(null, {
+  // http://leafletjs.com/reference.html#geojson-style
+  'style': getStyle
+  }).bindTooltip(neighborhoodPopup)
+
+  dt = omnivore.topojson('data/card.json', null, customLayer).addTo(map)
+
+})
+
+$('#respir').click(function(){
+
+  // updateLayer("blue", "data/respir.json")
+
+  if (map.hasLayer(dt)) {
+    map.removeLayer(dt) //Luis: Quitar palabra reservada "return"
+  }
+
+  color2 = "blue" 
+
+  //L: customLayer ya declarado de manera global (en linea 158). Por eso, quitamos de aquí la palabra reservada "var"
+  customLayer = L.geoJSON(null, {
+  // http://leafletjs.com/reference.html#geojson-style
+  'style': getStyle
+  }).bindTooltip(neighborhoodPopup)
+
+  dt = omnivore.topojson('data/respir.json', null, customLayer).addTo(map)
+
+})
+
+
 //var dt = omnivore.topojson('../data/zipcodes_2.json').addTo(map);
 
 //function popupContent(layer) {
